@@ -24,8 +24,8 @@ void Event::producer() {
 			}
 			ready = true;
 			cout << "Producer: The event is send!\n";
-		}
-		cv.notify_one();
+			cv.notify_one();
+		}		
 		this_thread::sleep_for(chrono::seconds(1));
 	}	
 }
@@ -51,3 +51,4 @@ int main() {
 	consumer_thread.join();
 	return 0;
 }
+
