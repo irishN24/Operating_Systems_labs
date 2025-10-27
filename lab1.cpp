@@ -8,17 +8,17 @@ using namespace std;
 
 class Event {
 private:
-	mutex mutx;
-	condition_variable cv;
-	bool ready = false;
+	mutex mutx; // Мьютекс для синхронизации
+	condition_variable cv; // Переменная для ожидания событий
+	bool ready = false; // Флаг состояния события
 public:
-	void producer();
-	void consumer();
+	void producer(); // Метод производителя
+	void consumer(); // Метод потребителя
 };
 void Event::producer() {
 	while (true) {
 		{
-			unique_lock<std::mutex> lock(mutx);
+			unique_lock<mutex> lock(mutx);
 			if (ready) {
 				continue;
 			}
@@ -32,9 +32,7 @@ void Event::producer() {
 void Event::consumer() {
 	while (true) {
 		unique_lock<mutex> lock(mutx);
-		cv.wait(lock, [this] {
-			return ready;
-		});
+		cv.wait(lock, [this] { return ready; });
 		ready = false;
 		cout << "Consumer: The event has been processed\n";
 	}
